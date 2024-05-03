@@ -1,0 +1,22 @@
+.puzzle-container {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+  margin: 0 auto;
+}
+
+.puzzle-row {
+  display: flex;
+}
+
+.puzzle-piece {
+  width: 70px;
+  height: 70px;
+  border: 1px solid #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 24px;
+  cursor: pointer;
+}
+
