@@ -1,56 +1,85 @@
-document.addEventListener('DOMContentLoaded', function() {
-    const puzzlePieces = document.querySelectorAll('.puzzle-piece');
-    const emptyPiece = document.getElementById('empty-piece');
-    let puzzleSolved = false;
-  
-    shufflePieces();
-  
-    puzzlePieces.forEach(piece => {
-      piece.addEventListener('click', function() {
-        if (!puzzleSolved && isAdjacent(this, emptyPiece) && this.textContent !== '') {
-          swapPieces(this, emptyPiece);
-          checkWin();
-        }
-      });
-    });
-  
-    function shufflePieces() {
-      const numbers = Array.from(Array(15).keys()).map(x => x + 1);
-      numbers.push(null);
-      for (let i = numbers.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
+let puzzle = [];
+  for (let i = 0; i < 4; i++) {
+    puzzle[i] = [];
+    for (let j = 0; j < 4; j++) {
+      puzzle[i][j] = i * 4 + j + 1;
+    }
+  }
+  puzzle[3][3] = '';
+
+  for (let i = 0; i < 1000; i++) {
+    let rand1 = Math.floor(Math.random() * 4);
+    let rand2 = Math.floor(Math.random() * 4);
+    let rand3 = Math.floor(Math.random() * 4);
+    let rand4 = Math.floor(Math.random() * 4);
+    let temp = puzzle[rand1][rand2];
+    puzzle[rand1][rand2] = puzzle[rand3][rand4];
+    puzzle[rand3][rand4] = temp;
+  }
+
+  let table = document.getElementById('puzzle');
+  for (let i = 0; i < 4; i++) {
+    let row = document.createElement('tr');
+    for (let j = 0; j < 4; j++) {
+      let cell = document.createElement('td');
+      cell.textContent = puzzle[i][j];
+      row.appendChild(cell);
+
+      let clickCount = 0;
+
+    cell.onclick = function() {
+      if (this.textContent === '') return;
+
+      let row = Array.from(this.parentNode.parentNode.children).indexOf(this.parentNode);
+      let col = Array.from(this.parentNode.children).indexOf(this);
+
+      if (row > 0 && puzzle[row - 1][col] === '') {
+        puzzle[row - 1][col] = puzzle[row][col];
+        puzzle[row][col] = '';
+        this.style.top = `${(row - 1) * 80}px`;
+      } else if (row < 3 && puzzle[row + 1][col] === '') { 
+        puzzle[row + 1][col] = puzzle[row][col];
+        puzzle[row][col] = '';
+        this.style.top = `${(row + 1) * 80}px`;
+      } else if (col > 0 && puzzle[row][col - 1] === '') {
+        puzzle[row][col - 1] = puzzle[row][col];
+        puzzle[row][col] = '';
+        this.style.left = `${(col - 1) * 80}px`;
+      } else if (col < 3 && puzzle[row][col + 1] === '') { 
+        puzzle[row][col + 1] = puzzle[row][col];
+        puzzle[row][col] = '';
+        this.style.left = `${(col + 1) * 80}px`;
       }
-      puzzlePieces.forEach((piece, index) => {
-        if (numbers[index]) {
-          piece.textContent = numbers[index];
+
+      clickCount++;
+
+      renderPuzzle();
+      if (isSolved()) {
+        alert(`Gratulálok! Megoldottad a feladatot! Kattintások száma:${clickCount}`);
+      }
+    };
+    }
+    table.appendChild(row);
+  }
+
+  function renderPuzzle() {
+    for (let i = 0; i < 4; i++) {
+      for (let j = 0; j < 4; j++) {
+        table.rows[i].cells[j].textContent = puzzle[i][j];
+      }
+    }
+  }
+
+  function isSolved() {
+    let count = 1;
+    for (let i = 0; i < 4; i++) {
+      for (let j = 0; j < 4; j++) {
+        if (i === 3 && j === 3) {
+          if (puzzle[i][j] !== '') return false;
         } else {
-          piece.textContent = '';
+          if (puzzle[i][j] != count++) return false;
         }
-      });
-    }
-  
-    function isAdjacent(piece1, piece2) {
-      const piece1Index = Array.from(puzzlePieces).indexOf(piece1);
-      const piece2Index = Array.from(puzzlePieces).indexOf(piece2);
-      const rowDiff = Math.abs(Math.floor(piece1Index / 4) - Math.floor(piece2Index / 4));
-      const colDiff = Math.abs((piece1Index % 4) - (piece2Index % 4));
-      return (rowDiff === 0 && colDiff === 1) || (colDiff === 0 && rowDiff === 1);
-    }
-  
-    function swapPieces(piece1, piece2) {
-      const temp = piece1.textContent;
-      piece1.textContent = piece2.textContent;
-      piece2.textContent = temp;
-    }
-  
-    function checkWin() {
-      const orderedNumbers = Array.from(Array(15).keys()).map(x => x + 1);
-      const currentNumbers = Array.from(puzzlePieces).map(piece => parseInt(piece.textContent));
-      if (currentNumbers.every((value, index) => value === orderedNumbers[index]) && emptyPiece.parentElement === puzzlePieces[15].parentElement) {
-        puzzleSolved = true;
-        alert('Gratulálok, megoldottad a feladványt!');
       }
     }
-  });
-  
+    return true;
+  }
