@@ -9,6 +9,7 @@ body {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
+  text-align: center;
 }
 
 h1 {
@@ -19,8 +20,13 @@ h1 {
   margin-bottom: 30px;
 }
 
+#stopwatch {
+  color: #fff;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
 #puzzle {
-  text-align: center;
   margin: auto;
   border-collapse: collapse;
 }
@@ -32,7 +38,6 @@ td {
   font-size: 36px;
   cursor: pointer;
   transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
-  color: #fff;
   background-color: #333;
   border: 3px solid #fff;
 }
@@ -69,9 +74,14 @@ td.empty:hover {
 }
 
 .btn:hover {
-  background-color: #ff33cc;
+  background-color: rgb(192, 12, 12);
 }
 
 .btn:active {
   transform: translateY(1px);
+}
+
+td.correct {
+  animation: highlight 1s ease-in-out;
+  background-color: rgb(8, 211, 8);
 }
