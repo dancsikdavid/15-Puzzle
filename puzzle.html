@@ -1,13 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hu">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="puzzle.css">
-<title>15 Puzzle</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>15 Puzzle Game</title>
+  <link rel="stylesheet" href="puzzle.css">
 </head>
 <body>
-<table id="puzzle"></table>
-<script src="puzzle.js"></script>
+  <div class="container">
+    <h1>15 Puzzle</h1>
+    <div id="stopwatch">00:00</div>
+    <button class="btn" id="start-btn">Start</button>
+    <button class="btn" id="restart-btn" style="display: none;">Újraindítás</button>
+    <br>
+    <br>
+    <br>
+    <br>
+    <table id="puzzle" style="display: none;"></table>
+  </div>
+  <script src="puzzle.js"></script>
 </body>
 </html>
